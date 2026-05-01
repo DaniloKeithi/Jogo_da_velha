@@ -1,39 +1,85 @@
-## Função criar tabuleiro: Cria uma matriz de 3x3 que será a estrutura do tabuleiro
-## Exemplo: folha de papel
+## Cria a função com o parametro "tabuleiro" que irá imprimir as linhas do tabuleiro na tela
+
+def mostrar_tabuleiro(tabuleiro):
+    for linha in tabuleiro:
+        print(" | ".join(linha))
+
+def verificar_vitoria(tabuleiro, jogador):
+
+    ##laço de repetição que percorre a matriz e verifica se as condições de vitória são verdadeiras
 
 
-def criar_tabuleiro():
-    tabuleiro = [[" 1 "," 2 "," 3 "],
-                 [" 4 "," 5 "," 6 "],
-                 [" 7 "," 8 "," 9 "]
-    ]
-    return tabuleiro
-
-## Função imprimir tabuleiro: Vai utilizar a variavel "tabuleiro" como parametro 
-## para de fato imprimir as linhas do nosso tabuleiro Exemplo: o jogador desenha 
-## os espaços na folha
-
-def imprimir_tabuleiro(tabuleiro):
-    print("\n") ##pula uma linha 
-
-    print(f"{tabuleiro[0][0]} | {tabuleiro[0][1]} | {tabuleiro[0][2]} | ") ## Coluna 0
-    print("---+---+---") ## Linha horizontal
-
-    print(f"{tabuleiro[1][0]} | {tabuleiro[1][1]} | {tabuleiro[1][2]} | ") ## Coluna 1
-    print("---+---+---") ## Linha horizontal
-       
-    print(f"{tabuleiro[2][0]} | {tabuleiro[2][1]} | {tabuleiro[2][2]} | ") ## Coluna 2
-    print("---+---+---")  ## Linha horizontal
-
-    print("\n") ##pula uma linha 
-    ## O f dentro do print serve para que possamos colocar as variaveis junto com a string
-    ## Dentro das chaves temos o "Endereço" da das jogadas
-    ## "|" são as linhas verticais
-
-def fazer_jogada(jogador, tabuleiro):
+    for i in range (3):
+        if tabuleiro[i][0] == jogador and tabuleiro[i][1] == jogador and tabuleiro[i][2] == jogador: ##linhas 
+            return True
         
+    for i in range (3):
+        if tabuleiro[0][i] == jogador and tabuleiro[1][i] == jogador and tabuleiro[2][i] == jogador: ## colunas
+            return True
+        
+    if tabuleiro[0][0] == jogador and tabuleiro[1][1] == jogador and tabuleiro[2][2] == jogador: ## diagonal \
+            return True    
+        
+    if tabuleiro[0][2] == jogador and tabuleiro[1][1] == jogador and tabuleiro[2][0] == jogador: ## diagonal /
+            return True    
+
+    return False    
 
 
+
+def verificar_empate(tablueiro):
+    for linha in tablueiro:
+        for casa in linha:
+            if casa not in ["X", "O"]:
+                return False
+    return True 
+     
+
+
+tabuleiro = [["1", "2", "3"],["4","5","6"], ["7","8","9"]] ##Cria uma lista de listas (matriz 3x3) para formar os espaços do tabuleiro
+
+
+
+jogador_atual = "X" ## Cria o jogador que irá começar, no caso será sempre o X
+
+
+
+for rodada in range(9):
+    mostrar_tabuleiro(tabuleiro) 
+    escolha = input(f"0 Jogador {jogador_atual}, escolha uma posição de (1-9): ")
+    print("\n")
+    posicao = int(escolha) - 1
+    linha, coluna = posicao // 3, posicao % 3 ## basicamente nessa parte estamos pegando o valor da variavel
+    ##"escolha" que recebe o valor da posição que o jogador deseja e colocando em outra variavel inteira
+    ## na variavel linha atribuimos uma conta que pega o valor digitado -1 e faz a divisão exata por 3
+    ## na variavel coluna atribuimis uma conta que pega o valor digitado -1 divide por 3 e pega o resto
+    ## Exemplo: O jogador quer a posição 9. então 9-1 = 8 | linha: 8 // 3 = 2 | coluna: 8 % 3 sobra 2 | então linha 2 e coluna = 2 
+
+
+
+    if tabuleiro[linha][coluna] in ["X", "O"]:
+        print("Posição já está preenchida. Tente novamente")
+        continue
+    tabuleiro[linha][coluna] = jogador_atual
+
+
+
+    if verificar_vitoria(tabuleiro, jogador_atual):
+        mostrar_tabuleiro(tabuleiro)
+        print(f"Jogador {jogador_atual} venceu!")
+        break
+
+
+    if verificar_empate(tabuleiro):
+        mostrar_tabuleiro(tabuleiro)
+        print("Deu velha! O jogo empatou.")
+        break
+
+
+    if jogador_atual == "O":
+        jogador_atual = "X" 
+    else: 
+        jogador_atual = "O"    
 
 
 
